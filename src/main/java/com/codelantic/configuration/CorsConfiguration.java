@@ -20,7 +20,6 @@ public class CorsConfiguration {
                         .allowedHeaders("*")
                         .allowedOriginPatterns("*")
                         .allowCredentials(true);
-                WebMvcConfigurer.super.addCorsMappings(registry);
             }
         };
     }
