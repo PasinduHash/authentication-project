@@ -1,6 +1,7 @@
 package com.codelantic.api;
 
 import com.codelantic.entity.JwtRequest;
+import com.codelantic.entity.JwtResponse;
 import com.codelantic.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,8 +16,8 @@ public class JwtController {
     @Autowired
     private JwtService jwtService;
     @PostMapping({"/authenticate"})
-    public void createJwtToken(@RequestBody JwtRequest jwtRequest) throws Exception {
-
+    public JwtResponse createJwtToken(@RequestBody JwtRequest jwtRequest) throws Exception {
+        return jwtService.createJwtToken(jwtRequest);
     }
 
 }
