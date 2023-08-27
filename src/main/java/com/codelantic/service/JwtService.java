@@ -31,14 +31,12 @@ public class JwtService implements UserDetailsService {
     private AuthenticationManager authenticationManager;
 
     public JwtResponse createJwtToken(JwtRequest jwtRequest) throws Exception {
-        System.out.println("create token -- Jwt service");
+
         String userName = jwtRequest.getUserName();
         String userPassword = jwtRequest.getUserPassword();
-        System.out.println(userName);
-        System.out.println(userPassword);
-        System.out.println("create token - before authe -- Jwt service");
+
 //        authenticate(userName, userPassword);
-        System.out.println("create token - after authe -- Jwt service");
+
         UserDetails userDetails = loadUserByUsername(userName);
         String newGeneratedToken = jwtUtil.generateToken(userDetails);
 
@@ -51,7 +49,7 @@ public class JwtService implements UserDetailsService {
         User user = userDAO.findById(username).get();
 
         if (user != null) {
-            System.out.println("inside the if loop in jWT service");
+
             return new org.springframework.security.core.userdetails.User(
                     user.getUsername(),
                     user.getPassword(),
@@ -64,15 +62,10 @@ public class JwtService implements UserDetailsService {
 
     private void authenticate(String userName, String userPassword) throws Exception {
         try {
-            System.out.println(userName);
-            System.out.println(userPassword);
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName, userPassword));
-            System.out.println("INSIDE AUTHENTICATION - JWTSERVICE");
         } catch (DisabledException e) {
-            System.out.println("error 1 - jwt service");
             throw new Exception("USER_DISABLED", e);
         } catch (BadCredentialsException e) {
-            System.out.println("error 2 - jwt service");
             throw new Exception("INVALID_CREDENTIALS", e);
         }
     }
