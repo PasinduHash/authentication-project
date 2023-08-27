@@ -10,12 +10,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
+import java.util.Arrays;
 
 @Service
 public class JwtService implements UserDetailsService {
@@ -30,10 +31,14 @@ public class JwtService implements UserDetailsService {
     private AuthenticationManager authenticationManager;
 
     public JwtResponse createJwtToken(JwtRequest jwtRequest) throws Exception {
+        System.out.println("create token -- Jwt service");
         String userName = jwtRequest.getUserName();
         String userPassword = jwtRequest.getUserPassword();
-        authenticate(userName, userPassword);
-
+        System.out.println(userName);
+        System.out.println(userPassword);
+        System.out.println("create token - before authe -- Jwt service");
+//        authenticate(userName, userPassword);
+        System.out.println("create token - after authe -- Jwt service");
         UserDetails userDetails = loadUserByUsername(userName);
         String newGeneratedToken = jwtUtil.generateToken(userDetails);
 
@@ -46,10 +51,11 @@ public class JwtService implements UserDetailsService {
         User user = userDAO.findById(username).get();
 
         if (user != null) {
+            System.out.println("inside the if loop in jWT service");
             return new org.springframework.security.core.userdetails.User(
                     user.getUsername(),
                     user.getPassword(),
-                    new HashSet<>()
+                    Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"))
             );
         } else {
             throw new UsernameNotFoundException("User not found with username: " + username);
@@ -58,10 +64,15 @@ public class JwtService implements UserDetailsService {
 
     private void authenticate(String userName, String userPassword) throws Exception {
         try {
+            System.out.println(userName);
+            System.out.println(userPassword);
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName, userPassword));
+            System.out.println("INSIDE AUTHENTICATION - JWTSERVICE");
         } catch (DisabledException e) {
+            System.out.println("error 1 - jwt service");
             throw new Exception("USER_DISABLED", e);
         } catch (BadCredentialsException e) {
+            System.out.println("error 2 - jwt service");
             throw new Exception("INVALID_CREDENTIALS", e);
         }
     }

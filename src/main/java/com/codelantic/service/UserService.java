@@ -23,7 +23,7 @@ public class UserService {
 
     }
     public User registerNewUser(User user) {
-        user.setUsername(getEncodedPassword(user.getPassword()));
+        user.setPassword(getEncodedPassword(user.getPassword()));
         return userDAO.save(user);
     }
 
