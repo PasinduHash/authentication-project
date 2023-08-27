@@ -3,7 +3,7 @@ package com.codelantic.entity;
 import javax.persistence.*;
 
 import java.time.LocalDateTime;
-
+@Entity
 public class UserLoginDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
